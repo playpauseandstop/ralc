@@ -82,6 +82,10 @@ def parse_args(args):
         'rate', help='Rate per hour. Should be decimal value.',
         metavar='RATE', type=rate_type
     )
+    parser.add_argument(
+        '--version', action='version',
+        version='%(prog)s {0}'.format(__version__)
+    )
 
     return parser.parse_args(args)
 
