@@ -2,6 +2,12 @@
 ralc
 ====
 
+.. image:: https://travis-ci.org/playpauseandstop/ralc.png?branch=master
+    :target: https://travis-ci.org/playpauseandstop/ralc
+
+.. image:: https://pypip.in/v/ralc/badge.png
+    :target: https://pypi.python.org/pypi/ralc
+
 Rate Calculator for multiplicate spent hours with rate per hour to find out how
 many money you earned.
 
@@ -39,3 +45,10 @@ Usage
     optional arguments:
       -h, --help    show this help message and exit
 
+Changelog
+=========
+
+0.1 (2014-01-16)
+----------------
+
++ Initial release
