@@ -34,12 +34,33 @@ class ValidationError(ValueError):
     """
 
 
+def abs_decimal(value, validate=True):
+    """
+    Init decimal value and quantize it using default rounder.
+    """
+    # Convert float values to string before casting to decimal
+    if isinstance(value, float):
+        value = str(round(value, 2))
+
+    # Cast value to decimal
+    if not isinstance(value, Decimal):
+        value = Decimal(value)
+
+    # And quantize decimal
+    value = value.quantize(ROUNDER, ROUND_UP)
+
+    if (validate and value < ROUNDER) or (not validate and value < 0):
+        raise ValueError('Only positive values supported.')
+
+    return value
+
+
 def calc(hours, rate):
     """
     Multiplicate spent hours with rate per hour to find out how many money has
     been earned.
     """
-    return to_decimal(validate_hours(hours) * to_decimal(rate))
+    return abs_decimal(validate_hours(hours) * abs_decimal(rate))
 
 
 def main(*args):
@@ -65,7 +86,7 @@ def parse_args(args):
         Raise decimal exceptions as value errors.
         """
         try:
-            return to_decimal(value)
+            return abs_decimal(value)
         except DecimalException as err:
             raise ValueError(str(err))
 
@@ -90,17 +111,6 @@ def parse_args(args):
     return parser.parse_args(args)
 
 
-def to_decimal(value):
-    """
-    Init decimal value and quantize it using default rounder.
-    """
-    if isinstance(value, float):
-        value = str(round(value, 2))
-    if not isinstance(value, Decimal):
-        value = Decimal(value)
-    return value.quantize(ROUNDER, ROUND_UP)
-
-
 def validate_hours(value):
     """
     Validate hours value and convert if it valid to Decimal.
@@ -115,7 +125,7 @@ def validate_hours(value):
     # If value is already decimal, or int, or float return it as quantized
     # decimal
     if isinstance(value, (Decimal, float) + integer_types):
-        return to_decimal(value)
+        return abs_decimal(value)
 
     # Now value should be a string, if not raise an error
     if not isinstance(value, text_types):
@@ -133,14 +143,15 @@ def validate_hours(value):
         hours = value
 
     try:
-        hours = to_decimal(hours)
+        hours = abs_decimal(hours)
         minutes = int(minutes)
         seconds = int(seconds)
     except (DecimalException, TypeError, ValueError):
         raise ValidationError('Invalid hours value. Please, use next format: '
                               'HH[:MM[:SS]]')
 
-    return hours + to_decimal(Decimal(minutes * 60 + seconds) / Decimal(3600))
+    remainder = Decimal(minutes * 60 + seconds) / Decimal(3600)
+    return hours + abs_decimal(remainder, False)
 
 
 if __name__ == '__main__':

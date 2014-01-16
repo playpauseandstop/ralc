@@ -10,6 +10,15 @@ import ralc
 
 class TestRalc(unittest.TestCase):
 
+    def test_abs_decimal(self):
+        self.assertRaises(ValueError, ralc.abs_decimal, '-10.00')
+        self.assertRaises(ValueError, ralc.abs_decimal, '-10.00', False)
+        self.assertRaises(ValueError, ralc.abs_decimal, Decimal())
+        self.assertEqual(str(ralc.abs_decimal(Decimal(), False)), '0.00')
+        self.assertEqual(str(ralc.abs_decimal(20)), '20.00')
+        self.assertEqual(str(ralc.abs_decimal('25.50')), '25.50')
+        self.assertEqual(str(ralc.abs_decimal(25.50)), '25.50')
+
     def test_calc(self):
         self.assertEqual(ralc.calc('10', '20'), Decimal('200.00'))
         self.assertEqual(ralc.calc('10', '20.50'), Decimal('205.00'))
@@ -26,12 +35,6 @@ class TestRalc(unittest.TestCase):
         self.assertRaises(SystemExit, ralc.main, 'Invalid', '20')
         self.assertRaises(SystemExit, ralc.main, '10', 'Invalid')
         self.assertFalse(ralc.main('10', '20'))
-
-    def test_to_decimal(self):
-        self.assertEqual(str(ralc.to_decimal(Decimal())), '0.00')
-        self.assertEqual(str(ralc.to_decimal(20)), '20.00')
-        self.assertEqual(str(ralc.to_decimal('25.50')), '25.50')
-        self.assertEqual(str(ralc.to_decimal(25.50)), '25.50')
 
     def test_validate_hours(self):
         self.assertEqual(ralc.validate_hours(10), Decimal('10.00'))
