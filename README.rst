@@ -5,7 +5,7 @@ ralc
 .. image:: https://travis-ci.org/playpauseandstop/ralc.png?branch=master
     :target: https://travis-ci.org/playpauseandstop/ralc
 
-.. image:: https://pypip.in/v/ralc/badge.png
+.. image:: https://img.shields.io/pypi/v/ralc.svg
     :target: https://pypi.python.org/pypi/ralc
 
 Rate Calculator for multiplicate spent hours with rate per hour to find out how
